@@ -6,58 +6,12 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="css/style2.css" media="screen,projection" />
     <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-auth.js"></script>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        * {
-            box-sizing: border-box
-        }
 
-        /* Style the tab */
-        .tab {
-            float: left;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
-            width: 30%;
-            height: 300px;
-        }
-
-        /* Style the buttons that are used to open the tab content */
-        .tab button {
-            display: block;
-            background-color: inherit;
-            color: black;
-            padding: 22px 16px;
-            width: 100%;
-            border: none;
-            outline: none;
-            text-align: left;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        /* Change background color of buttons on hover */
-        .tab button:hover {
-            background-color: #ddd;
-        }
-
-        /* Create an active/current "tab button" class */
-        .tab button.active {
-            background-color: #ccc;
-        }
-
-        /* Style the tab content */
-        .tabcontent {
-            float: left;
-            padding: 0px 12px;
-            border: 1px solid #ccc;
-            width: 70%;
-            border-left: none;
-            height: 300px;
-        }
-    </style>
 </head>
 
 <body>
@@ -86,39 +40,86 @@
     <!-- navigation -->
     <div class="container">
         <br>
-        <button class="btn waves-effect waves-light" type="submit" name="action">Add Category
-            <i class="material-icons right">add</i>
-        </button>
-        
+
+        <!-- Modal Trigger -->
+        <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Add Category<i
+                class="material-icons right">add</i></a>
+        <!-- Modal Structure -->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <div class="row">
+                    <h3>Add Category</h3>
+                    <div class="input-field col s6">
+                        <input id="categoryName" type="text" data-length="25" placeholder="Category Name"
+                            class="validate">
+                        <label for="categoryName">Category Name</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect red white-text btn-flat">Cancel</a>
+                <button class="modal-close btn waves-effect waves-light" type="submit" name="action"
+                    id="btnAddCategory">Add Category
+                    <i class="material-icons right">add</i>
+                </button>
+            </div>
+        </div>
     </div>
     <br>
     <div class="container">
 
-        <div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">London</button>
-            <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-            <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+        <div class="tab" id="verticalTab">
+            <button class="tablinks" onclick="openCategory(event, 'Mens Fashion')" id="defaultOpen">Mens
+                Fashion</button>
+            <!-- <button class="tablinks" onclick="openCategory(event, 'Female Fashion')">Female Fashion</button>
+            <button class="tablinks" onclick="openCategory(event, 'Health and Beauty')">Health and Beauty</button> -->
         </div>
+        <div id="categoryHolder">
 
-        <div id="London" class="tabcontent">
-            <h3>London</h3>
-            <p>London is the capital city of England.</p>
+            <div id="Mens Fashion" class="tabcontent">
+                <h3>Mens Fashion</h3>
+                <button class="waves-effect waves-light btn btn-small modal-trigger" data-target="subCategoryModal"
+                    id="Mens">Add
+                    Subcategory</button>
+                <div id="subCatList">
+                    <p>Mens Fashion is the capital city of England.</p>
+                </div>
+            </div>
+
+            <!-- <div id="Female Fashion" class="tabcontent">
+                <h3>Female Fashion</h3>
+                <p>Female Fashion is the capital of France.</p>
+            </div>
+
+            <div id="Health and Beauty" class="tabcontent">
+                <h3>Health and Beauty</h3>
+                <p>Health and Beauty is the capital of Japan.</p>
+            </div> -->
+
         </div>
-
-        <div id="Paris" class="tabcontent">
-            <h3>Paris</h3>
-            <p>Paris is the capital of France.</p>
-        </div>
-
-        <div id="Tokyo" class="tabcontent">
-            <h3>Tokyo</h3>
-            <p>Tokyo is the capital of Japan.</p>
-        </div>
-
     </div>
 
-
-
+    <!-- Subcategory Modal -->
+    <div id="subCategoryModal" class="modal">
+        <div class="modal-content">
+            <div class="row">
+                <h3>Add Subcategory</h3>
+                <div class="input-field col s6">
+                    <input id="subCategoryName" type="text" data-length="25" placeholder="SubCategory Name"
+                        class="validate">
+                    <label for="subCategoryName">Subcategory Name</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect red white-text btn-flat">Cancel</a>
+            <button class="modal-close btn waves-effect waves-light" type="submit" name="action"
+                id="btnSubCategoryName">Add Subcategory
+                <i class="material-icons right">add</i>
+            </button>
+        </div>
+    </div>
+    <!--  Eof SubCatModal-->
 
     <!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
@@ -130,8 +131,8 @@
     <!--  -->
     <script type="text/javascript" src="js/dashboard.js"></script>
     <script>
-        function openCity(evt, cityName) {
-            var i, tabcontent, tablinks;
+        function openCategory(evt, cityName) {
+            let i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
@@ -145,6 +146,79 @@
         }
         // Get the element with id="defaultOpen" and click on it
         document.getElementById("defaultOpen").click();
+    </script>
+    <script>
+        let btnAddCategory = document.getElementById('btnAddCategory');
+        let btnSubCategoryName = document.getElementById('btnSubCategoryName');
+        const vTab = document.getElementById('verticalTab');
+        const catHolder = document.getElementById('categoryHolder');
+        let categoryName = document.getElementById('categoryName');
+        let subCategoryName = document.getElementById('subCategoryName');
+        var x = 0;
+    
+        btnAddCategory.addEventListener('click', addCategory);
+        btnSubCategoryName.addEventListener('click', addSubCategory);
+
+        function addCategory() {
+            // create tab button
+            let newBtnCategory = document.createElement('button');
+            newBtnCategory.textContent = categoryName.value;
+            newBtnCategory.setAttribute('class', 'tablinks');
+            newBtnCategory.setAttribute('onClick', "openCategory(event,'" + categoryName.value + "')");
+            vTab.appendChild(newBtnCategory);
+            // create tab content
+            let tabContent = document.createElement('div');
+            let subCatList = document.createElement('div');
+            
+            tabContent.setAttribute('id', categoryName.value);
+            subCatList.setAttribute('id',"subCatList" + categoryName.value);
+            tabContent.setAttribute('class', 'tabcontent');
+            tabContent.setAttribute('style', 'display:none;');
+            // appending to the parent element
+            let title = document.createElement('h3');
+            title.textContent = categoryName.value;
+            let content = document.createElement('p');
+            content.textContent = categoryName.value;
+            let btnAddSubCategory = document.createElement('button');
+            btnAddSubCategory.setAttribute('class', 'waves-effect waves-light btn btn-small modal-trigger');
+            btnAddSubCategory.setAttribute('data-target', 'subCategoryModal');
+            btnAddSubCategory.setAttribute('id', categoryName.value + "sub");
+            btnAddSubCategory.setAttribute('onClick', 'myFunction(this)');
+            btnAddSubCategory.innerHTML = "Add Subcategory";
+            tabContent.appendChild(title);
+            subCatList.appendChild(content);
+            tabContent.appendChild(subCatList);
+            tabContent.appendChild(btnAddSubCategory);
+            // appending to the parent element
+            catHolder.appendChild(tabContent);
+
+            // x++;
+            console.log(categoryName.value);
+            // console.log(x);
+            categoryName.value = '';
+        }
+
+        function myFunction(elem) {
+            addSubCategory();
+            console.log(elem.parentNode.id);
+        }
+    
+        function addSubCategory() {
+            // let list = document.getElementById();
+            let subCatItem = document.createElement('p');
+            subCatItem.textContent = subCategoryName.value;
+            
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.modal').modal();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('input#categoryName, textarea#textarea2').characterCounter();
+        });
     </script>
 </body>
 

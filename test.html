@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="testID">
+        <button onClick="checkId(this)">Click</button>
+    </div>
+    <div id="testID0001">
+        <button onClick="checkId(this)">Click</button>
+    </div>
+    <div id="asdasdasdas">
+        <button onClick="checkId(this)">Click</button>
+    </div>
+    <div id="qwrwERWERWE">
+        <button onClick="checkId(this)">Click</button>
+    </div>
+    <script>
+        function checkId(elem) {
+            alert(elem.parentNode.id);
+        }
+    </script>
+</body>
+
+</html>
