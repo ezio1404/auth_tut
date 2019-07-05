@@ -67,26 +67,9 @@
     </div>
     <br>
     <div class="container">
-
         <div class="tab" id="verticalTab">
-            <button class="tablinks" onclick="openCategory(event, 'mensFashion')" id="defaultOpen">Mens Fashion</button>
         </div>
         <div id="categoryHolder">
-            <div id="mensFashion" class="tabcontent">
-                <h3>Mens Fashion</h3>
-                <!--  -->
-                <input id="subCategoryNamemensFashion" type="text" data-length="25" placeholder="Subcategory Name"
-                    class="validate">
-                <button class="waves-effect waves-light btn btn-small" onclick="myFunction(this)">Add
-                    Subcategory</button>
-                <!--  -->
-                
-     
-                <div id="subCatListmensFashion">
-                    <p>mensFashion is the capital city of England.</p>
-                </div>
-            </div>
-
         </div>
     </div>
 
@@ -119,7 +102,6 @@
     </script>
     <script>
         let btnAddCategory = document.getElementById('btnAddCategory');
-
         const vTab = document.getElementById('verticalTab');
         const catHolder = document.getElementById('categoryHolder');
         let categoryName = document.getElementById('categoryName');
@@ -127,7 +109,9 @@
         var x = 0;
 
         btnAddCategory.addEventListener('click', addCategory);
-
+         //Adding
+         let databaseRef= firebase.databaseRef().ref('/category');;
+         
 
         function addCategory() {
             // create tab button
@@ -147,8 +131,14 @@
             // appending to the parent element tabcontent
             let title = document.createElement('h3');
             title.textContent = categoryName.value;
-  
-    
+            // btns for CRUD
+            let titleEditBtn = document.createElement('span');
+            let titleEditIcon = document.createElement('i');
+            titleEditIcon.setAttribute('class','material-icons');
+            titleEditIcon.textContent = "edit";
+            titleEditBtn.setAttribute('class','right');
+            titleEditBtn.appendChild(titleEditIcon);
+            
             let inputSubCat = document.createElement('input');
             inputSubCat.setAttribute('id', 'subCategoryName' + categoryName.value);
             inputSubCat.setAttribute('type', 'text');
@@ -158,10 +148,11 @@
 
             let btnAddSubCategory = document.createElement('button');
             btnAddSubCategory.setAttribute('class', 'waves-effect waves-light btn btn-small');
-            btnAddSubCategory.setAttribute('onclick', 'myFunction(this)');
+            btnAddSubCategory.setAttribute('onclick', 'create_category(this)');
             btnAddSubCategory.textContent = "Add Subcategory";
 
             tabContent.appendChild(title);
+            title.appendChild(titleEditBtn);
             tabContent.appendChild(inputSubCat);
             tabContent.appendChild(btnAddSubCategory);
             tabContent.appendChild(subCatList);
@@ -174,17 +165,28 @@
             categoryName.value = '';
         }
 
-        function myFunction(elem) {
+        function create_category(elem) {
             let parentId = elem.parentNode.id;
             let subCategoryName = document.getElementById('subCategoryName' + parentId);
             console.log(subCategoryName.value);
             console.log(parentId);
-            const list = document.getElementById('subCatList' + parentId);
-            let subCatItem = document.createElement('p');
+            const ulElem = document.getElementById('subCatList' + parentId);
+            let subCatEditBtn = document.createElement('span');
+            let icon = document.createElement('i');
+            icon.setAttribute('class','material-icons');
+            icon.textContent="edit";
+            subCatEditBtn.setAttribute('class','right');
+            subCatEditBtn.appendChild(icon);
+            // subCatEditBtn.textContent="edit";
+            // let ulElem = document.createElement('ul');
+            ulElem.setAttribute('class','collection');
+            let subCatItem = document.createElement('a');
+            subCatItem.setAttribute('class','collection-item');
             subCatItem.textContent = subCategoryName.value;
-            list.appendChild(subCatItem);
+           
+            subCatItem.appendChild(subCatEditBtn);
+            ulElem.appendChild(subCatItem);
             subCategoryName.value = '';
-
         }
     </script>
     <script>
