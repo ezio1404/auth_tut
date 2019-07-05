@@ -8,6 +8,7 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
     <link type="text/css" rel="stylesheet" href="css/style2.css" media="screen,projection" />
     <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-auth.js"></script>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -66,6 +67,10 @@
         </div>
     </div>
     <br>
+
+
+
+
     <div class="container">
         <div class="tab" id="verticalTab">
         </div>
@@ -84,7 +89,7 @@
     <!--  -->
     <script type="text/javascript" src="js/dashboard.js"></script>
     <script>
-        function openCategory(evt, cityName) {
+        function openCategory(evt, categoryName) {
             let i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
             for (i = 0; i < tabcontent.length; i++) {
@@ -94,7 +99,7 @@
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
-            document.getElementById(cityName).style.display = "block";
+            document.getElementById(categoryName).style.display = "block";
             evt.currentTarget.className += " active";
         }
         // Get the element with id="defaultOpen" and click on it
@@ -105,15 +110,73 @@
         const vTab = document.getElementById('verticalTab');
         const catHolder = document.getElementById('categoryHolder');
         let categoryName = document.getElementById('categoryName');
+        let databaseRef = firebase.database().ref('category/');
 
         var x = 0;
 
         btnAddCategory.addEventListener('click', addCategory);
-         //Adding
-         let databaseRef= firebase.databaseRef().ref('/category');;
-         
+
+        databaseRef.once('value', function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                var childKey = childSnapshot.key;
+                var childData = childSnapshot.val();
+
+                let newBtnCategory = document.createElement('button');
+                newBtnCategory.textContent = childData.category;
+                newBtnCategory.setAttribute('class', 'tablinks');
+                newBtnCategory.setAttribute('onClick', "openCategory(event,'" + childData.category +
+                    "')");
+                vTab.appendChild(newBtnCategory);
+
+
+                let tabContent = document.createElement('div');
+                let subCatList = document.createElement('div');
+
+                tabContent.setAttribute('id', childData.category);
+                subCatList.setAttribute('id', childKey);
+                tabContent.setAttribute('class', 'tabcontent');
+                tabContent.setAttribute('style', 'display:none;');
+                // appending to the parent element tabcontent
+                let title = document.createElement('h3');
+                title.textContent = childData.category;
+                // btns for CRUD
+                let titleEditBtn = document.createElement('span');
+                let titleEditIcon = document.createElement('i');
+                titleEditIcon.setAttribute('class', 'material-icons');
+                titleEditIcon.textContent = "edit";
+                titleEditBtn.setAttribute('class', 'right');
+                titleEditBtn.appendChild(titleEditIcon);
+
+                let inputSubCat = document.createElement('input');
+                inputSubCat.setAttribute('id', 'subCategoryName' + childData.category);
+                inputSubCat.setAttribute('type', 'text');
+                inputSubCat.setAttribute('length', '25');
+                inputSubCat.setAttribute('placeholder', 'Subcategory Name');
+                inputSubCat.setAttribute('class', 'validate');
+
+                let btnAddSubCategory = document.createElement('button');
+                btnAddSubCategory.setAttribute('class', 'waves-effect waves-light btn btn-small');
+                btnAddSubCategory.setAttribute('onclick', 'createSubCategory(this)');
+                btnAddSubCategory.textContent = "Add Subcategory";
+
+                tabContent.appendChild(title);
+                title.appendChild(titleEditBtn);
+                tabContent.appendChild(inputSubCat);
+                tabContent.appendChild(btnAddSubCategory);
+                tabContent.appendChild(subCatList);
+                // appending to the parent element category holder
+                catHolder.appendChild(tabContent);
+
+                console.log(childData.category);
+
+            });
+        });
 
         function addCategory() {
+
+            let uid = firebase.database().ref().child('category/').push().key;
+
+
             // create tab button
             let newBtnCategory = document.createElement('button');
             newBtnCategory.textContent = categoryName.value;
@@ -125,7 +188,7 @@
             let subCatList = document.createElement('div');
 
             tabContent.setAttribute('id', categoryName.value);
-            subCatList.setAttribute('id', "subCatList" + categoryName.value);
+            subCatList.setAttribute('id', uid);
             tabContent.setAttribute('class', 'tabcontent');
             tabContent.setAttribute('style', 'display:none;');
             // appending to the parent element tabcontent
@@ -134,13 +197,13 @@
             // btns for CRUD
             let titleEditBtn = document.createElement('span');
             let titleEditIcon = document.createElement('i');
-            titleEditIcon.setAttribute('class','material-icons');
+            titleEditIcon.setAttribute('class', 'material-icons');
             titleEditIcon.textContent = "edit";
-            titleEditBtn.setAttribute('class','right');
+            titleEditBtn.setAttribute('class', 'right');
             titleEditBtn.appendChild(titleEditIcon);
-            
+
             let inputSubCat = document.createElement('input');
-            inputSubCat.setAttribute('id', 'subCategoryName' + categoryName.value);
+            inputSubCat.setAttribute('id', uid);
             inputSubCat.setAttribute('type', 'text');
             inputSubCat.setAttribute('length', '25');
             inputSubCat.setAttribute('placeholder', 'Subcategory Name');
@@ -148,7 +211,7 @@
 
             let btnAddSubCategory = document.createElement('button');
             btnAddSubCategory.setAttribute('class', 'waves-effect waves-light btn btn-small');
-            btnAddSubCategory.setAttribute('onclick', 'create_category(this)');
+            btnAddSubCategory.setAttribute('onclick', 'createSubCategory(this)');
             btnAddSubCategory.textContent = "Add Subcategory";
 
             tabContent.appendChild(title);
@@ -159,33 +222,45 @@
             // appending to the parent element category holder
             catHolder.appendChild(tabContent);
 
+            // categoryNameValue =categoryName.value;
+            let data = {
+                id: uid,
+                category: categoryName.value
+            }
+
+            var updates = {};
+            updates['/category/' + uid] = data;
+            firebase.database().ref().update(updates);
             // x++;
             console.log(categoryName.value);
             // console.log(x);
             categoryName.value = '';
         }
 
-        function create_category(elem) {
+        function createSubCategory(elem) {
+            // let uid = firebase.database().ref().child('category/').push().key;
+
             let parentId = elem.parentNode.id;
             let subCategoryName = document.getElementById('subCategoryName' + parentId);
             console.log(subCategoryName.value);
             console.log(parentId);
-            const ulElem = document.getElementById('subCatList' + parentId);
+            const ulElem = document.getElementById(parentId);
             let subCatEditBtn = document.createElement('span');
             let icon = document.createElement('i');
-            icon.setAttribute('class','material-icons');
-            icon.textContent="edit";
-            subCatEditBtn.setAttribute('class','right');
+            icon.setAttribute('class', 'material-icons');
+            icon.textContent = "edit";
+            subCatEditBtn.setAttribute('class', 'right');
             subCatEditBtn.appendChild(icon);
             // subCatEditBtn.textContent="edit";
             // let ulElem = document.createElement('ul');
-            ulElem.setAttribute('class','collection');
+            ulElem.setAttribute('class', 'collection');
             let subCatItem = document.createElement('a');
-            subCatItem.setAttribute('class','collection-item');
+            subCatItem.setAttribute('class', 'collection-item');
             subCatItem.textContent = subCategoryName.value;
-           
+
             subCatItem.appendChild(subCatEditBtn);
             ulElem.appendChild(subCatItem);
+            
             subCategoryName.value = '';
         }
     </script>
