@@ -103,7 +103,7 @@
             evt.currentTarget.className += " active";
         }
         // Get the element with id="defaultOpen" and click on it
-        document.getElementById("defaultOpen").click();
+        // document.getElementById("defaultOpen").click();
     </script>
     <script>
         let btnAddCategory = document.getElementById('btnAddCategory');
@@ -127,7 +127,6 @@
                 newBtnCategory.setAttribute('onClick', "openCategory(event,'" + childData.category +
                     "')");
                 vTab.appendChild(newBtnCategory);
-
 
                 let tabContent = document.createElement('div');
                 let subCatList = document.createElement('div');
@@ -176,51 +175,50 @@
 
             let uid = firebase.database().ref().child('category/').push().key;
 
+            // // create tab button
+            // let newBtnCategory = document.createElement('button');
+            // newBtnCategory.textContent = categoryName.value;
+            // newBtnCategory.setAttribute('class', 'tablinks');
+            // newBtnCategory.setAttribute('onClick', "openCategory(event,'" + categoryName.value + "')");
+            // vTab.appendChild(newBtnCategory);
+            // // create tab content
+            // let tabContent = document.createElement('div');
+            // let subCatList = document.createElement('div');
 
-            // create tab button
-            let newBtnCategory = document.createElement('button');
-            newBtnCategory.textContent = categoryName.value;
-            newBtnCategory.setAttribute('class', 'tablinks');
-            newBtnCategory.setAttribute('onClick', "openCategory(event,'" + categoryName.value + "')");
-            vTab.appendChild(newBtnCategory);
-            // create tab content
-            let tabContent = document.createElement('div');
-            let subCatList = document.createElement('div');
+            // tabContent.setAttribute('id', categoryName.value);
+            // subCatList.setAttribute('id', uid);
+            // tabContent.setAttribute('class', 'tabcontent');
+            // tabContent.setAttribute('style', 'display:none;');
+            // // appending to the parent element tabcontent
+            // let title = document.createElement('h3');
+            // title.textContent = categoryName.value;
+            // // btns for CRUD
+            // let titleEditBtn = document.createElement('span');
+            // let titleEditIcon = document.createElement('i');
+            // titleEditIcon.setAttribute('class', 'material-icons');
+            // titleEditIcon.textContent = "edit";
+            // titleEditBtn.setAttribute('class', 'right');
+            // titleEditBtn.appendChild(titleEditIcon);
 
-            tabContent.setAttribute('id', categoryName.value);
-            subCatList.setAttribute('id', uid);
-            tabContent.setAttribute('class', 'tabcontent');
-            tabContent.setAttribute('style', 'display:none;');
-            // appending to the parent element tabcontent
-            let title = document.createElement('h3');
-            title.textContent = categoryName.value;
-            // btns for CRUD
-            let titleEditBtn = document.createElement('span');
-            let titleEditIcon = document.createElement('i');
-            titleEditIcon.setAttribute('class', 'material-icons');
-            titleEditIcon.textContent = "edit";
-            titleEditBtn.setAttribute('class', 'right');
-            titleEditBtn.appendChild(titleEditIcon);
+            // let inputSubCat = document.createElement('input');
+            // inputSubCat.setAttribute('id', uid);
+            // inputSubCat.setAttribute('type', 'text');
+            // inputSubCat.setAttribute('length', '25');
+            // inputSubCat.setAttribute('placeholder', 'Subcategory Name');
+            // inputSubCat.setAttribute('class', 'validate');
 
-            let inputSubCat = document.createElement('input');
-            inputSubCat.setAttribute('id', uid);
-            inputSubCat.setAttribute('type', 'text');
-            inputSubCat.setAttribute('length', '25');
-            inputSubCat.setAttribute('placeholder', 'Subcategory Name');
-            inputSubCat.setAttribute('class', 'validate');
+            // let btnAddSubCategory = document.createElement('button');
+            // btnAddSubCategory.setAttribute('class', 'waves-effect waves-light btn btn-small');
+            // btnAddSubCategory.setAttribute('onclick', 'createSubCategory(this)');
+            // btnAddSubCategory.textContent = "Add Subcategory";
 
-            let btnAddSubCategory = document.createElement('button');
-            btnAddSubCategory.setAttribute('class', 'waves-effect waves-light btn btn-small');
-            btnAddSubCategory.setAttribute('onclick', 'createSubCategory(this)');
-            btnAddSubCategory.textContent = "Add Subcategory";
-
-            tabContent.appendChild(title);
-            title.appendChild(titleEditBtn);
-            tabContent.appendChild(inputSubCat);
-            tabContent.appendChild(btnAddSubCategory);
-            tabContent.appendChild(subCatList);
-            // appending to the parent element category holder
-            catHolder.appendChild(tabContent);
+            // tabContent.appendChild(title);
+            // title.appendChild(titleEditBtn);
+            // tabContent.appendChild(inputSubCat);
+            // tabContent.appendChild(btnAddSubCategory);
+            // tabContent.appendChild(subCatList);
+            // // appending to the parent element category holder
+            // catHolder.appendChild(tabContent);
 
             // categoryNameValue =categoryName.value;
             let data = {
